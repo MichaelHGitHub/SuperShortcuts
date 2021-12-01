@@ -1,2 +1,8 @@
 ﻿  CommandServer.cpp
+  main.cpp
+  MessagerProxy.cpp
+  KeyCommand.cpp
+  stdafx.cpp
+  Generating Code...
+     Creating library C:\Code\GitHub\SuperShortcuts\x64\Debug\\llhook.lib and object C:\Code\GitHub\SuperShortcuts\x64\Debug\\llhook.exp
   SuperShortcuts.vcxproj -> C:\Code\GitHub\SuperShortcuts\x64\Debug\SuperShortcutsx64.exe

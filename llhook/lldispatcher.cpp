@@ -35,7 +35,7 @@ bool LLDispatcher::DispatchKbEvent(WPARAM wParam, LPARAM lParam)
             m_KbEvents[i].shift_flag == shift_flag &&
             m_KbEvents[i].ctrl_flag == ctrl_flag)
         {
-            ::PostMessage(m_KbClientWnd, m_KbEvents[i].msg, wParam, LPARAM(0));
+            ::PostMessage(m_KbClientWnd, m_KbEvents[i].msg, wParam, LPARAM(m_KbEvents[i].etrax_info));
             return m_KbEvents[i].pass_on;
         }
     }
@@ -57,7 +57,7 @@ bool LLDispatcher::DispatchMouseEvent(WPARAM wParam, LPARAM lParam)
             m_MouseEvents[i].shift_flag == shift_flag &&
             m_MouseEvents[i].ctrl_flag == ctrl_flag)
         {
-            ::PostMessage(m_MouseClientWnd, m_MouseEvents[i].msg, (WPARAM)(pMouseInfo->mouseData), (LPARAM)0);
+            ::PostMessage(m_MouseClientWnd, m_MouseEvents[i].msg, (WPARAM)(pMouseInfo->mouseData), LPARAM(m_KbEvents[i].etrax_info));
             return m_MouseEvents[i].pass_on;
         }
     }
