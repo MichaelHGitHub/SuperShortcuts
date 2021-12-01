@@ -1,0 +1,7 @@
+﻿  stdafx.cpp
+  dllmain.cpp
+  lldispatcher.cpp
+  llhook.cpp
+  Generating Code...
+     Creating library C:\Code\GitHub\SuperShortcuts\x64\Debug\llhookx64.lib and object C:\Code\GitHub\SuperShortcuts\x64\Debug\llhookx64.exp
+  llhook.vcxproj -> C:\Code\GitHub\SuperShortcuts\x64\Debug\llhookx64.dll

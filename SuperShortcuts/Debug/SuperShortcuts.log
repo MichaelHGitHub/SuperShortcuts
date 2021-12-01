@@ -1,0 +1,8 @@
+﻿  CommandServer.cpp
+  main.cpp
+  MessagerProxy.cpp
+  KeyCommand.cpp
+  stdafx.cpp
+  Generating Code...
+     Creating library C:\Code\GitHub\SuperShortcuts\Debug\SuperShortcuts.lib and object C:\Code\GitHub\SuperShortcuts\Debug\SuperShortcuts.exp
+  SuperShortcuts.vcxproj -> C:\Code\GitHub\SuperShortcuts\Debug\SuperShortcuts.exe
