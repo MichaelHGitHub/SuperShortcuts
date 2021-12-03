@@ -15,8 +15,8 @@
 
 #include "stdafx.h"
 #include <strsafe.h>
-#include <shellapi.h>
 #include <commctrl.h>
+#include <Windowsx.h>
 #include <string>
 #include "resource.h"
 #include "Consts.h"
@@ -36,8 +36,9 @@ namespace
 
 MessageProxy::MessageProxy(LPCWCHAR szWindowClass, LPCWCHAR szWindowTile) :
     m_hWnd(NULL),
-    szClassName(szWindowClass),
-    shellHookMessageID_(0)
+    m_szClassName(szWindowClass),
+    shellHookMessageID_(0),
+    m_hMenu(NULL)
 {
     InitInstance(szWindowClass, szWindowTile);
 }
@@ -50,7 +51,7 @@ MessageProxy::~MessageProxy()
         ::SendMessage(m_hWnd, WM_CLOSE, 0, 0);
     }
 
-    ::UnregisterClass(szClassName.c_str(), g_hModule);
+    ::UnregisterClass(m_szClassName.c_str(), g_hModule);
 }
 
 
@@ -88,7 +89,6 @@ BOOL MessageProxy::InitInstance(LPCWCHAR szWindowClass, LPCWCHAR szWindowTile)
 
                 if (m_hWnd != NULL)
                 {
-                    SetSystemTray();
                     OnCreate();
                     ret = TRUE;
                 }
@@ -103,37 +103,62 @@ BOOL MessageProxy::SetSystemTray()
 {
     BOOL result = TRUE;
 
-    NOTIFYICONDATA niData;
-    ZeroMemory(&niData, sizeof(NOTIFYICONDATA));
+    ZeroMemory(&m_niData, sizeof(NOTIFYICONDATA));
 
-    niData.cbSize = sizeof(NOTIFYICONDATA);
-    niData.uID = IDI_ICON_48X48;
-    niData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-    niData.hWnd = m_hWnd;
-    niData.uCallbackMessage = SYS_TRAY_MSG;
-    wcscpy_s(niData.szTip, sizeof(niData.szTip) / sizeof(wchar_t), sysTrayTip);
+    m_niData.cbSize = sizeof(NOTIFYICONDATA);
+    m_niData.uID = IDI_ICON_48X48;
+    m_niData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+    m_niData.hWnd = m_hWnd;
+    m_niData.uCallbackMessage = SYS_TRAY_MSG;
+    wcscpy_s(m_niData.szTip, sizeof(m_niData.szTip) / sizeof(wchar_t), sysTrayTip);
 
     // Load the icon for high DPI.
     HRESULT hr = LoadIconMetric(GetModuleHandle(NULL),
-        MAKEINTRESOURCE(IDI_ICON_48X48), LIM_SMALL, &(niData.hIcon));
+        MAKEINTRESOURCE(IDI_ICON_48X48), LIM_SMALL, &(m_niData.hIcon));
 
     if (SUCCEEDED(hr))
     {
         // NIM_ADD adds a new tray icon
-        result = Shell_NotifyIcon(NIM_ADD, &niData);
+        result = Shell_NotifyIcon(NIM_ADD, &m_niData);
     }
     else
     {
         result = FALSE;
     }
 
-    if (0 != niData.hIcon)
+    if (0 != m_niData.hIcon)
     {
-        DestroyIcon(niData.hIcon);
+        DestroyIcon(m_niData.hIcon);
     }
 
-    return TRUE;
+    m_hMenu = LoadMenu(NULL, MAKEINTRESOURCE(IDR_POPUPMENU));
 
+    return result;
+}
+
+void MessageProxy::RemoveSystemTray()
+{
+    if (NULL != m_hMenu)
+    {
+        DestroyMenu(m_hMenu);
+    }
+
+    Shell_NotifyIcon(NIM_DELETE, &m_niData);
+}
+
+BOOL MessageProxy::ShowContextMenu()
+{
+    BOOL result = TRUE;
+
+    HMENU hMenu = GetSubMenu(m_hMenu, 0);
+    POINT p = {};
+    GetCursorPos(&p);
+    SetForegroundWindow(m_hWnd);
+
+    TrackPopupMenu(hMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN | TPM_LEFTBUTTON,
+        p.x, p.y, 0, m_hWnd, NULL);
+
+    return result;
 }
 
 LRESULT MessageProxy::HandleMessages(UINT msg, WPARAM wParam, LPARAM lParam, bool& isHandled)
@@ -145,6 +170,8 @@ LRESULT MessageProxy::HandleMessages(UINT msg, WPARAM wParam, LPARAM lParam, boo
 
 void MessageProxy::OnCreate()
 {
+    SetSystemTray();
+
     // Map the ShellHookWindow message
     shellHookMessageID_ = ::RegisterWindowMessage(L"SHELLHOOK");
 
@@ -157,12 +184,18 @@ void MessageProxy::OnCreate()
 
 void MessageProxy::OnDestroy()
 {
+    RemoveSystemTray();
+
     if (m_hWnd != NULL)
     {
         ::DeregisterShellHookWindow(m_hWnd);
     }
 }
 
+void MessageProxy::Close()
+{
+    ::PostMessage(m_hWnd, WM_CLOSE, 0, 0);
+}
 
 namespace
 {
@@ -183,7 +216,22 @@ namespace
             ::SetProp(hWnd, szAssObjectName, pObject);
 
             isHandled = true;
+            break;
 
+        case WM_COMMAND:
+            switch (LOWORD(wParam))
+            {
+            case IDM_SETTING:
+                isHandled = true;
+                    break;
+            case IDM_CLOSE:
+                pObject = (MessageProxy*)::GetProp(hWnd, szAssObjectName);
+                pObject->Close();
+                isHandled = true;
+                break;
+            default:
+                break;
+            }
             break;
 
         case WM_CLOSE:
@@ -204,8 +252,14 @@ namespace
 
             break;
         case SYS_TRAY_MSG:
-
-            break;
+            switch (LOWORD(lParam))
+            {
+            case WM_RBUTTONDOWN:
+            case WM_CONTEXTMENU:
+                pObject = (MessageProxy*)::GetProp(hWnd, szAssObjectName);
+                pObject->ShowContextMenu();
+                isHandled = true;
+            }
         default:
             pObject = (MessageProxy*)::GetProp(hWnd, szAssObjectName);
             if (pObject != NULL)
@@ -222,6 +276,5 @@ namespace
         {
             return DefWindowProc(hWnd, message, wParam, lParam);
         }
-
     }
 }

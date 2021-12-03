@@ -8,6 +8,11 @@
 #define IDI_ICON_72X72                       104
 #define IDI_ICON_128X128                     106
 
+// Pop up menu IDs
+#define IDR_POPUPMENU                        200
+#define IDM_SETTING                          201
+#define IDM_CLOSE                            202
+
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

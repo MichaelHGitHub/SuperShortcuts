@@ -72,6 +72,16 @@ IDI_ICON_72X72               ICON                    "res\\key_72x72.ico"
 
 IDI_ICON_128X128             ICON                    "res\\key_128x128.ico"
 
+
+IDR_POPUPMENU MENU DISCARDABLE
+BEGIN
+POPUP "SuperShortcut"
+BEGIN
+MENUITEM "Settings", IDM_SETTING
+MENUITEM "Exit", IDM_CLOSE
+END
+END
+
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 

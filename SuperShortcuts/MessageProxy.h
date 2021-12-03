@@ -10,6 +10,7 @@
 #pragma once 
 
 #include <Windows.h>
+#include <shellapi.h>
 #include <string>
 
 const UINT KEYBOARD_HOOK_EVENT = WM_USER + 1;
@@ -26,6 +27,9 @@ public:
     void virtual OnDestroy();
     void virtual OnCreate();
 
+    BOOL ShowContextMenu();
+    void Close();
+
 protected:
     int shellHookMessageID_;
 
@@ -33,7 +37,11 @@ private:
 
     BOOL InitInstance(LPCWCHAR szWindowClass, LPCWCHAR szWindowTile);
     BOOL SetSystemTray();
+    void RemoveSystemTray();
+
 
     HWND m_hWnd;
-    std::wstring szClassName;
+    std::wstring m_szClassName;
+    NOTIFYICONDATA m_niData;
+    HMENU m_hMenu;
 };
