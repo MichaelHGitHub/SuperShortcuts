@@ -1,11 +1,1 @@
-﻿  CommandServer.cpp
-  main.cpp
-  MessagerProxy.cpp
-  KeyCommand.cpp
-  stdafx.cpp
-     Creating library C:\Code\GitHub\SuperShortcuts\x64\Release\SuperShortcutsx64.lib and object C:\Code\GitHub\SuperShortcuts\x64\Release\SuperShortcutsx64.exp
-  Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 94 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-  SuperShortcuts.vcxproj -> C:\Code\GitHub\SuperShortcuts\x64\Release\SuperShortcutsx64.exe
+﻿
