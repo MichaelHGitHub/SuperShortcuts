@@ -2,18 +2,11 @@
 
 #include <windows.h>
 #include <iostream>
+#include "Consts.h"
 #include "CommandServer.h"
 
 namespace
 {
-#ifdef WIN64
-    const wchar_t szClientWindowClassName[] = L"SuperShortcutsWindowClassName64";
-#else
-    const wchar_t szClientWindowClassName[] = L"SuperShortcutsWindowClassName";
-#endif
-    wchar_t szWindowTile[] = L"SuperShortcutsWindow_OPT";
-    wchar_t eventName[] = L"Global\\SuperShortcutsEvent";
-
     HANDLE hStartEvent = NULL;
 }
 

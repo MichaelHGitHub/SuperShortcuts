@@ -2,9 +2,9 @@
 * Module Name:  MessageProxy.h
 * Project:      CppWindowsService
 * Copyright (c) Microsoft Corporation.
-* 
+*
 * Implement Keyboard hook logic:
-*   
+*
 \***************************************************************************/
 
 #pragma once 
@@ -16,26 +16,18 @@ const UINT KEYBOARD_HOOK_EVENT = WM_USER + 1;
 
 class MessageProxy
 {
-
-public :
-
+public:
     MessageProxy(LPCWCHAR szWindowClass, LPCWCHAR szWindowTile);
     ~MessageProxy();
 
-    //HRESULT Run();
-    //void Stop();
-
     HWND GetWindowHandle();
 
-	LRESULT virtual HandleMessages(UINT msg, WPARAM wParam, LPARAM lParam, bool& isHandled);
-
-	void virtual OnDestroy();
-	void virtual OnCreate();
-
-protected:
+    LRESULT virtual HandleMessages(UINT msg, WPARAM wParam, LPARAM lParam, bool& isHandled);
+    void virtual OnDestroy();
+    void virtual OnCreate();
 
 protected:
-		int shellHookMessageID_;
+    int shellHookMessageID_;
 
 private:
 
@@ -43,10 +35,5 @@ private:
     BOOL SetSystemTray();
 
     HWND m_hWnd;
-	std::wstring szClassName;
-
-
-
-    //bool toStop;
-
+    std::wstring szClassName;
 };

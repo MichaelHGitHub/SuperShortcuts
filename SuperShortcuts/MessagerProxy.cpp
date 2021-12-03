@@ -11,10 +11,15 @@
 
 // Register keyboard hook callback
 
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 #include "stdafx.h"
+#include <strsafe.h>
 #include <shellapi.h>
+#include <commctrl.h>
 #include <string>
 #include "resource.h"
+#include "Consts.h"
 #include "Messages.h"
 #include "MessageProxy.h"
 
@@ -96,29 +101,36 @@ BOOL MessageProxy::InitInstance(LPCWCHAR szWindowClass, LPCWCHAR szWindowTile)
 
 BOOL MessageProxy::SetSystemTray()
 {
+    BOOL result = TRUE;
+
     NOTIFYICONDATA niData;
     ZeroMemory(&niData, sizeof(NOTIFYICONDATA));
 
     niData.cbSize = sizeof(NOTIFYICONDATA);
-
     niData.uID = IDI_ICON_48X48;
     niData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-
-    niData.hIcon =
-        (HICON)LoadImage(GetModuleHandle(NULL),
-            MAKEINTRESOURCE(IDI_ICON_32X32),
-            IMAGE_ICON,
-            GetSystemMetrics(SM_CXSMICON),
-            GetSystemMetrics(SM_CYSMICON),
-            LR_DEFAULTCOLOR);
-
     niData.hWnd = m_hWnd;
     niData.uCallbackMessage = SYS_TRAY_MSG;
+    wcscpy_s(niData.szTip, sizeof(niData.szTip) / sizeof(wchar_t), sysTrayTip);
 
-    // NIM_ADD adds a new tray icon
-    Shell_NotifyIcon(NIM_ADD, &niData);
+    // Load the icon for high DPI.
+    HRESULT hr = LoadIconMetric(GetModuleHandle(NULL),
+        MAKEINTRESOURCE(IDI_ICON_48X48), LIM_SMALL, &(niData.hIcon));
 
-    DestroyIcon(niData.hIcon);
+    if (SUCCEEDED(hr))
+    {
+        // NIM_ADD adds a new tray icon
+        result = Shell_NotifyIcon(NIM_ADD, &niData);
+    }
+    else
+    {
+        result = FALSE;
+    }
+
+    if (0 != niData.hIcon)
+    {
+        DestroyIcon(niData.hIcon);
+    }
 
     return TRUE;
 
