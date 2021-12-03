@@ -169,8 +169,20 @@
     <ClInclude Include="CommandServer.h" />
     <ClInclude Include="MessageProxy.h" />
     <ClInclude Include="KeyCommand.h" />
+    <ClInclude Include="Messages.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\key_128x128.ico" />
+    <Image Include="res\key_32x32.ico" />
+    <Image Include="res\key_48x48.ico" />
+    <Image Include="res\key_64x64.ico" />
+    <Image Include="res\key_72x72.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

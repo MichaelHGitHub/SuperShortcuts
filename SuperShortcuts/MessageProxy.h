@@ -40,6 +40,7 @@ protected:
 private:
 
     BOOL InitInstance(LPCWCHAR szWindowClass, LPCWCHAR szWindowTile);
+    BOOL SetSystemTray();
 
     HWND m_hWnd;
 	std::wstring szClassName;

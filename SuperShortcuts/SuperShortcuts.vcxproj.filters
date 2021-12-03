@@ -47,5 +47,33 @@
     <ClInclude Include="KeyCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Messages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\key_32x32.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\key_48x48.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\key_64x64.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\key_72x72.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\key_128x128.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
