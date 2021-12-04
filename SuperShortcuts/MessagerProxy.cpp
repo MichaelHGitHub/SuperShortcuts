@@ -106,7 +106,7 @@ BOOL MessageProxy::SetSystemTray()
     ZeroMemory(&m_niData, sizeof(NOTIFYICONDATA));
 
     m_niData.cbSize = sizeof(NOTIFYICONDATA);
-    m_niData.uID = IDI_ICON_48X48;
+    m_niData.uID = IDI_ICON_72X72;
     m_niData.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
     m_niData.hWnd = m_hWnd;
     m_niData.uCallbackMessage = SYS_TRAY_MSG;
@@ -114,7 +114,7 @@ BOOL MessageProxy::SetSystemTray()
 
     // Load the icon for high DPI.
     HRESULT hr = LoadIconMetric(GetModuleHandle(NULL),
-        MAKEINTRESOURCE(IDI_ICON_48X48), LIM_SMALL, &(m_niData.hIcon));
+        MAKEINTRESOURCE(IDI_ICON_72X72), LIM_LARGE, &(m_niData.hIcon));
 
     if (SUCCEEDED(hr))
     {
